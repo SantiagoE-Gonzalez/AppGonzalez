@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { StyleSheet,Button, Text, View, Modal, TouchableOpacity, Image, Pressable } from 'react-native';
-const Categorias = () => {
+import { StyleSheet, Button, Text, View, Modal, TouchableOpacity, Image } from 'react-native';
+const Categorias = ({ navigation }) => { //recibir con destructuring la "navigation"
   const [modalVisible, setModalVisible] = useState(false);
   
   const a = () => {
@@ -10,10 +10,16 @@ const Categorias = () => {
   const closeModal = () => {
     setModalVisible(false);
   }
+
+  const goToCategoria = () => {
+    navigation.navigate('Productos', {
+      category: 'categoryID'
+    });
+  }
   return (
     <>
       <View style={styles.view}>
-        <TouchableOpacity onPress={a} style={styles.appButtonContainer}>
+        <TouchableOpacity onPress={goToCategoria} style={styles.appButtonContainer}>
           <Image source={require('../assets/pantalon.jpg')} style={styles.imagenBoton} />
           <Text style={styles.textoBoton}>Pantalones</Text>
         </TouchableOpacity>
