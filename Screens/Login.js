@@ -4,60 +4,74 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'fire
 import { auth } from '../Firebase/config';
 
 const Login = () => {
-    const [existeUsuario, setExisteUsuario] = useState(true);
+    const [tengoUsuario, setTengoUsuario] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [mensajeDeError, setMensajeDeError] = useState("");
 
     const changeExisteUsuarioStatus = () => {
-        setExisteUsuario(!existeUsuario);
+        setTengoUsuario(!tengoUsuario);
     }
 
+    /**
+     * Se llama a este metodo cuando se presiona el boton de iniciarSesion/Registrarse.
+     * Ya que es un solo botón que cambia de texto.
+     * Dependiendo el estado de existeUsuario
+     */
     const loginSingupAction = () => {
-        if (existeUsuario) {
-            if (email !== "" && password != "") {
-                signInWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // Signed in 
-                        const user = userCredential.user;
-                        console.log(user);
-                        // ...
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        console.log(errorCode, errorMessage);
-                    })
-                    .finally(() => {
-                        setEmail("");
-                        setPassword("");
-                    })
-            }
+        if (tengoUsuario) {
+            loginAction()
         } else {
-            if (email !== "" && password != "") {
-                createUserWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
-                        // Signed in 
-                        console.log(userCredential)
-                        const user = userCredential.user;
-                        // ...
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        console.log(errorCode, errorMessage);
-                        // ..
-                    })
-                    .finally(() => {
-                        setEmail("");
-                        setPassword("");
-                    })
-            }
+            singupAction()
         }
     }
+
+    /**
+     * Tiene la logica del login con firebase.
+     */
+    const loginAction = () => {
+        if (email !== "" && password != "") {
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log(user);
+                    // ...
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    setMensajeDeError(errorMessage);
+                    setEmail("");
+                    setPassword("");
+                })
+        }
+    }
+
+    /**
+     * Accion de registrarse con firebase.
+     */
+    const singupAction = () => {
+        if (email !== "" && password != "") {
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in 
+                    console.log(userCredential)
+                    const user = userCredential.user;
+                    // ...
+                })
+                .catch((error) => {
+                    const errorMessage = error.message;
+                    setMensajeDeError(errorMessage);
+                    setEmail("");
+                    setPassword("");
+                })
+        }
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.headerTitle}>
-                {existeUsuario ? 'Iniciar sesión' : 'Registrarse'}
+                {tengoUsuario ? 'Iniciar sesión' : 'Registrarse'}
             </Text>
             <View style={styles.viewImagen}>
                 <Image
@@ -83,16 +97,23 @@ const Login = () => {
                     onPress={loginSingupAction}
                 >
                     <Text style={styles.textoBotones}>
-                        {existeUsuario ? 'Iniciar sesión' : 'Registrarme'}
+                        {tengoUsuario ? 'Iniciar sesión' : 'Registrarme'}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.boton}
                     onPress={changeExisteUsuarioStatus}>
                     <Text style={styles.textoBotones}>
-                        {existeUsuario ? 'No tengo usuario' : 'Ya tengo usuario'}
+                        {tengoUsuario ? 'No tengo usuario' : 'Ya tengo usuario'}
                     </Text>
                 </TouchableOpacity>
             </View>
+            {mensajeDeError?
+            <View style={styles.viewAlert}>
+                <Text
+                style={styles.viewAlertText}
+                >{mensajeDeError}</Text>
+            </View>:<View></View>
+            }
         </View>
     )
 }
@@ -144,5 +165,15 @@ const styles = StyleSheet.create({
     viewImagen: {
         alignItems: 'center',
         width: '100%'
+    },
+    viewAlert: {
+        backgroundColor: '#7f0000',
+        padding: 10,
+        borderRadius: 25,
+        alignItems: 'center'
+    },
+    viewAlertText: {
+        color: '#fff',
+        fontSize: 15
     }
 })
