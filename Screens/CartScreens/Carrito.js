@@ -1,44 +1,75 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useContext } from 'react'
 import { Shop } from '../../Context/ShopProvider'
 
-const Carrito = () => {
-    const { cart , totalAPagar, cantidadItems } = useContext(Shop);
+const Carrito = ({navigation}) => {
+    const { cart, totalAPagar, cantidadItems, removeItem, clear } = useContext(Shop);
+    
+    const eliminarProducto = (item) => {
+        removeItem(item)
+    }
 
-    const Item = (item) => (
+    const finalizarCompra = () => {
+        navigation.navigate('FinalizarCompra')
+    }
+
+    const Item = ({ item }) => (
         <View style={styles.item}>
-          <Text style={styles.title}>{item.title}</Text>
-          
-          <View>
-            <Text>
-                Cantidad: {item.cantidad}
-            </Text>
-            <Text>
-                Precio unitario: {item.price}
-            </Text>
-            <Text>
-                Precio total: {item.price*item.cantidad}
-            </Text>
-          </View>
+            <Text style={styles.title}>{item.title}</Text>
+
+            <View>
+                <Text>
+                    Cantidad: {item.cantidad}
+                </Text>
+                <Text>
+                    Precio unitario: ${item.price.toFixed(2)}
+                </Text>
+                <Text>
+                    Precio total: ${(item.price * item.cantidad).toFixed(2)}
+                </Text>
+                <TouchableOpacity
+                    onPress={() => eliminarProducto(item)}
+                    style={styles.botonEliminarCompra}>
+                    <Text style={styles.textoBotonEliminarCompra}>Eliminar producto</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-      );
+    );
 
     const renderItem = ({ item }) => (
-        <Item title={item.title} cantidad={item.cantidad} />
-      );
+        <Item item={item} />
+    );
     return (
-        <View>
-            <View style={styles.item}>
-                <Text style={styles.title}>Resumen de compra</Text>
-                <Text>Total a pagar: ${totalAPagar}</Text>
-                <Text>Cantidad de artículos: {cantidadItems}</Text>
-            </View>
+        <ScrollView>
+            {cantidadItems > 0 ?
+                <View style={styles.item}>
+                    <Text style={styles.title}>Resumen de compra</Text>
+                    <Text>Total a pagar: ${totalAPagar.toFixed(2)}</Text>
+                    <Text>Cantidad de artículos: {cantidadItems}</Text>
+                </View> : 
+                <Text style={styles.title}> Todavía no agregaste ningún producto</Text>
+            }
+
             <FlatList
                 data={cart}
                 renderItem={renderItem}
-                keyExtractor={item => item.title}
+                keyExtractor={item => item.id}
             />
-        </View>
+            {cantidadItems > 0 ?
+            <View>
+                <TouchableOpacity
+                    onPress={clear}
+                    style={styles.botonEliminarCompra}>
+                    <Text style={styles.textoBotonEliminarCompra}>Limpiar carrito</Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                    onPress={finalizarCompra}
+                    style={styles.botonFinalizarCompra}>
+                    <Text style={styles.textoBotonFinalizarCompra}>Finalizar compra</Text>
+                </TouchableOpacity>
+            </View>: <Text></Text>
+            }
+        </ScrollView>
     )
 }
 
@@ -62,11 +93,33 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         textAlign: 'center',
-        fontWeight: '500'
+        fontWeight: 'bold'
     },
     description: {
         fontSize: 10,
         textAlign: 'left',
         fontWeight: '100'
     },
+    botonFinalizarCompra: {
+        backgroundColor: '#ffb703',
+        margin: 10,
+        padding: 10,
+        borderRadius: 10
+    }, botonEliminarCompra: {
+        backgroundColor: '#d90429',
+        margin: 10,
+        padding: 10,
+        borderRadius: 10
+    },
+    textoBotonFinalizarCompra: {
+        textAlign: 'center',
+        fontWeight: '500',
+        color: '#fff'
+    },
+    textoBotonEliminarCompra: {
+        textAlign: 'center',
+        fontWeight: '500',
+        color: '#fff'
+    }
+
 })
