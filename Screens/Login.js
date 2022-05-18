@@ -74,10 +74,7 @@ const Login = () => {
                 {tengoUsuario ? 'Iniciar sesión' : 'Registrarse'}
             </Text>
             <View style={styles.viewImagen}>
-                <Image
-                    style={styles.stretch}
-                    source={require('../assets/login.png')}
-                />
+                
             </View>
             <TextInput
                 style={styles.textInput}

@@ -1,5 +1,9 @@
-import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native'
 import { useEffect, useState } from 'react';
+import { FontsSizes } from '../Styles/fonts';
+import { Colors } from '../Styles/Colors';
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from '../Firebase/config';
 
 const Productos = ({ navigation, route }) => {
     const { category } = route.params;
@@ -7,15 +11,28 @@ const Productos = ({ navigation, route }) => {
 
     useEffect(() => {
         (async () => {
+          try {
             try {
-                const response = await fetch('https://fakestoreapi.com/products/category/' + category);
-                const data = await response.json();
-                setProductos(data);
+              let queryConsultaProductos = query(collection(db, "productos"));
+              if(category){
+                queryConsultaProductos = query(collection(db, "productos"), where("category", "==", category));
+              }
+              collection(db, "productos")
+              const querySnapshot = await getDocs(queryConsultaProductos);
+              const items = [];
+              querySnapshot.forEach((doc) => {
+                console.log(doc.id, " => ", doc.data());
+                items.push({id: doc.id, ...doc.data()});
+              });
+              setProductos(items);
             } catch (error) {
-                console.log(error);
+              console.log(error);
             }
+          } catch (error) {
+            console.log(error);
+          }
         })()
-    }, [category]);
+      }, [category]) 
 
     const irADetalle = (item) => {
         navigation.navigate('Detalle', {
@@ -53,14 +70,14 @@ export default Productos
 
 const styles = StyleSheet.create({
     item: {
-        backgroundColor: '#fff',
+        backgroundColor: Colors.colorBlanco,
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
         borderRadius: 10
     },
     title: {
-        fontSize: 32,
+        fontSize: FontsSizes.titleSize,
     },
     wrapperCustom: {
         borderRadius: 8,

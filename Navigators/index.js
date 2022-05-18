@@ -7,10 +7,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Login from '../Screens/Login';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../Firebase/config';
+import { MaterialCommunityIcons } from 'react-native-vector-icons';
+
 const TabNavigator = () => {
     const [user, setUser] = useState(null);
     const Tab = createBottomTabNavigator();
 
+    //const {cantidadItems} = useContext(Shop)
     //Verificar usuario con useEffects.
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -28,14 +31,36 @@ const TabNavigator = () => {
         });
     }, []);
 
-
     return (
         <NavigationContainer>
             {user ?
                 <Tab.Navigator>
-                    <Tab.Screen name="Home" component={ShopNavigator} options={{ headerShown: false }} />
-                    <Tab.Screen name="Ordenes" component={OrdersNavigator} options={{ headerShown: true }} />
-                    <Tab.Screen name="Carrito" component={CartNavigator} options={{ headerShown: true }} />
+                    <Tab.Screen
+                        name="Home"
+                        component={ShopNavigator}
+                        options={{
+                            headerShown: false,
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="home" color={color} size={size} />
+                            )
+                        }} />
+                    <Tab.Screen
+                        name="Ordenes"
+                        component={OrdersNavigator}
+                        options={{
+                            headerShown: true,
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="format-list-numbered" color={color} size={size} />
+                            )
+                        }} />
+                    <Tab.Screen name="Checkout" component={CartNavigator}
+                        options={{
+                            headerShown: false,
+                            tabBarBadge: 0 ,
+                            tabBarIcon: ({ color, size }) => (
+                                <MaterialCommunityIcons name="cart" color={color} size={size} />
+                            )
+                        }} />
                 </Tab.Navigator>
                 : <Login></Login>}
         </NavigationContainer>

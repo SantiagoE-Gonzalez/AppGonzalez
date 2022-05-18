@@ -1,10 +1,16 @@
 import { Image, View, Text, StyleSheet, Button } from 'react-native'
-import React from 'react'
+import React, {useContext} from 'react'
+import { Shop } from '../Context/ShopProvider';
+
 
 const Detalle = ({ navigation, route }) => {
 
     const { item } = route.params;
+    const {addItem} = useContext(Shop);
 
+    const agregarAlCarrito = () => {
+        addItem(item, 1);
+    }
     return (
         <View>
             <Text style={styles.title}>{item.title}</Text>
@@ -25,7 +31,9 @@ const Detalle = ({ navigation, route }) => {
 
             <View
                 style={styles.view}>
-                <Button title={'Agregar al carrito'}></Button>
+                <Button
+                onPress={agregarAlCarrito}
+                title={'Agregar al carrito'}></Button>
             </View>
 
         </View>

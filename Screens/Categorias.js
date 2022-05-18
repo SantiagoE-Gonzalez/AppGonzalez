@@ -1,7 +1,8 @@
 import { View, TouchableOpacity, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
 import React from 'react'
 import { useEffect, useState } from 'react';
-
+import { collection, getDocs, query } from "firebase/firestore";
+import { db } from '../Firebase/config';
 const Categorias = ({ navigation }) => {
     const [categorias, setCategorias] = useState([]);
 
@@ -12,29 +13,23 @@ const Categorias = ({ navigation }) => {
         })
     }
 
-
-    const renderItem = ({ item }) => (
-        <Item title={item} />
-    );
-    const Item = ({ title }) => (
-        <View>
-            <TouchableOpacity style={styles.item}
-                onPress={() => {
-                    irACategoria(title)
-                }}>
-                <Text>{title}</Text>
-            </TouchableOpacity>
-        </View>
-
-    );
-
     useEffect(() => {
         (async () => {
             try {
-                const response = await fetch('https://fakestoreapi.com/products/categories');
-                const data = await response.json();
-                setCategorias(data);
-                console.log(categorias);
+                try {
+                    let queryConsultaCategorias = query(collection(db, "categorias"));
+                    collection(db, "categorias")
+                    const querySnapshot = await getDocs(queryConsultaCategorias);
+                    const items = [];
+                    querySnapshot.forEach((doc) => {
+                        console.log(doc.id, " => ", doc.data());
+                        items.push({ id: doc.id, ...doc.data() });
+                    });
+                    console.log(items);
+                    setCategorias(items);
+                } catch (error) {
+                    console.log(error);
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -44,8 +39,18 @@ const Categorias = ({ navigation }) => {
         <View>
             <FlatList
                 data={categorias}
-                renderItem={renderItem}
-                keyExtractor={item => item}
+                renderItem={({ item }) => {
+                    return <View><TouchableOpacity style={styles.item}
+                        onPress={() => irACategoria(item.title)}
+                    >
+                        <Text>
+                            {item.title}
+                        </Text>
+                    </TouchableOpacity>
+                    </View>
+                }
+                }
+                keyExtractor={item => item.id.toString()}
             />
         </View>
     )
