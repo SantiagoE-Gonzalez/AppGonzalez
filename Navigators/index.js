@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import ShopNavigator from '../Navigators/Stacks/Shop';
 import OrdersNavigator from '../Navigators/Stacks/Order';
@@ -8,12 +8,13 @@ import Login from '../Screens/Login';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from '../Firebase/config';
 import { MaterialCommunityIcons } from 'react-native-vector-icons';
+import { Shop } from '../Context/ShopProvider';
 
 const TabNavigator = () => {
     const [user, setUser] = useState(null);
     const Tab = createBottomTabNavigator();
 
-    //const {cantidadItems} = useContext(Shop)
+    const {cantidadItems} = useContext(Shop)
     //Verificar usuario con useEffects.
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -56,7 +57,7 @@ const TabNavigator = () => {
                     <Tab.Screen name="Checkout" component={CartNavigator}
                         options={{
                             headerShown: false,
-                            tabBarBadge: 0 ,
+                            tabBarBadge: cantidadItems ,
                             tabBarIcon: ({ color, size }) => (
                                 <MaterialCommunityIcons name="cart" color={color} size={size} />
                             )
