@@ -15,6 +15,7 @@ const TabNavigator = () => {
     const Tab = createBottomTabNavigator();
 
     const {cantidadItems} = useContext(Shop)
+    
     //Verificar usuario con useEffects.
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {

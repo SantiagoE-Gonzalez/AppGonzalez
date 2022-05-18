@@ -1,11 +1,43 @@
-import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, Text, View, FlatList } from 'react-native'
 import React, { useContext } from 'react'
+import { Shop } from '../../Context/ShopProvider'
 
 const Carrito = () => {
+    const { cart , totalAPagar, cantidadItems } = useContext(Shop);
 
+    const Item = (item) => (
+        <View style={styles.item}>
+          <Text style={styles.title}>{item.title}</Text>
+          
+          <View>
+            <Text>
+                Cantidad: {item.cantidad}
+            </Text>
+            <Text>
+                Precio unitario: {item.price}
+            </Text>
+            <Text>
+                Precio total: {item.price*item.cantidad}
+            </Text>
+          </View>
+        </View>
+      );
+
+    const renderItem = ({ item }) => (
+        <Item title={item.title} cantidad={item.cantidad} />
+      );
     return (
         <View>
-            
+            <View style={styles.item}>
+                <Text style={styles.title}>Resumen de compra</Text>
+                <Text>Total a pagar: ${totalAPagar}</Text>
+                <Text>Cantidad de artículos: {cantidadItems}</Text>
+            </View>
+            <FlatList
+                data={cart}
+                renderItem={renderItem}
+                keyExtractor={item => item.title}
+            />
         </View>
     )
 }
@@ -28,8 +60,13 @@ const styles = StyleSheet.create({
         }
     },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         textAlign: 'center',
         fontWeight: '500'
+    },
+    description: {
+        fontSize: 10,
+        textAlign: 'left',
+        fontWeight: '100'
     },
 })
