@@ -1,4 +1,6 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useEffect } from 'react'
+import { db } from "../Firebase/config";
+import { collection, getDocs, query } from "firebase/firestore";
 
 //Se crea el contexto.
 export const Shop = createContext()
@@ -9,6 +11,45 @@ const ShopProvider = ({ children }) => {
     const [cantidadItems, setCantidadItems] = useState(0)
     const [cart, setCart] = useState([])
     const [totalAPagar, setTotalAPagar] = useState(0)
+    const [ordenesRealizadas, setOrdenesRealizadas] = useState([])
+    
+    useEffect(()=> {
+
+        (async ()=>{
+            const queryCollectionOrdenes = query(collection(db, "orders"))
+            //const queryCollection = query(collection(db, "productos"))
+            //const queryCollectionCategories = query(collection(db, "categories"))
+            
+            const querySnapshotOrdenes = await getDocs(queryCollectionOrdenes);
+            //const querySnapshot = await getDocs(queryCollection);
+            //const querySnapshotCategories = await getDocs(queryCollectionCategories)
+            /*const productos = []
+            querySnapshot.forEach((doc)=> {
+                const producto = {id: doc.id, ...doc.data()}
+                productos.push(producto)
+            })*/
+            /*const categories = []
+            querySnapshotCategories.forEach((doc)=> {
+                const category = {id: doc.id, ...doc.data()}
+                categories.push(category)
+            })*/
+            
+            const ordenes = []
+            querySnapshotOrdenes.forEach((doc)=> {
+                const orden = {id: doc.id, ...doc.data()}
+                ordenes.push(orden)
+            })
+            console.log("holaaaaaa");
+            console.log(ordenes);
+            setOrdenesRealizadas([...ordenes])
+            console.log("holaaaaaa2222222222");
+            console.log(ordenesRealizadas);
+            //setCategories([...categories])
+        })()
+
+    }, [])
+    
+    
     //Uso de funciones del context
     const addItem = (item, cantidadToAdd) => {
         const productoEnCarrito = isInCart(item)
@@ -43,7 +84,7 @@ const ShopProvider = ({ children }) => {
     }
 
     return (
-        <Shop.Provider value={{ cantidadItems, addItem, cart, totalAPagar, removeItem, clear}}>
+        <Shop.Provider value={{ cantidadItems, addItem, cart, totalAPagar, removeItem, clear, ordenesRealizadas}}>
             {children}
         </Shop.Provider>
     )

@@ -5,13 +5,14 @@ import { Colors } from '../../Styles/Colors';
 import { db } from '../../Firebase/config'
 import { addDoc, collection, doc, getDoc, writeBatch } from 'firebase/firestore'
 
-const FinalizarCompra = () => {
+const FinalizarCompra = ({navigation}) => {
     const { totalAPagar, cantidadItems, cart } = useContext(Shop);
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
     const [telefono, setTelefono] = useState("");
     const [direccion, setDireccion] = useState("");
+    const [compraRealizada, setCompraRealizada] = useState(false);
     const finalizarCompra = () => {
         // console.log("Se realizo la compra");
         // console.log(nombre, direccion);
@@ -44,7 +45,13 @@ const FinalizarCompra = () => {
         const batch = writeBatch(db)//ver en qué level colocarlo
         addDoc(collection(db, 'orders'), orderGenerada).then(({ id }) => {
             batch.commit().then(() => {
-                setCheckoutText(`Se genero la order con id:  + ${id}`)
+                Alert.alert(
+                    "Orden generada con éxito",
+                    `La orden se realizó con éxito con el id+ ${id}`,
+                    [
+                        { text: "Aceptar", onPress: () => navigation.navigate('OrdenesRealizadas') }
+                    ]
+                );
             })
         }).catch((err) => {
             console.log(`Error: ${err.message}`);
@@ -108,7 +115,8 @@ const FinalizarCompra = () => {
                 style={styles.botonFinalizarCompra}>
                 <Text style={styles.textoBotonFinalizarCompra}>Finalizar compra</Text>
             </TouchableOpacity>
-        </SafeAreaView>)
+        </SafeAreaView>
+        )
 }
 
 export default FinalizarCompra

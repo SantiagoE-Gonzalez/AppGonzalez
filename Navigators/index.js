@@ -50,7 +50,7 @@ const TabNavigator = () => {
                         name="Ordenes"
                         component={OrdersNavigator}
                         options={{
-                            headerShown: true,
+                            headerShown: false,
                             tabBarIcon: ({ color, size }) => (
                                 <MaterialCommunityIcons name="format-list-numbered" color={color} size={size} />
                             )
