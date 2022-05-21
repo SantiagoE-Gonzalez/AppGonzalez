@@ -1,6 +1,6 @@
 import { Image, View, Text, StyleSheet, Button } from 'react-native'
 import React, {useContext} from 'react'
-import { Shop } from '../Context/ShopProvider';
+import { Shop } from '../../Context/ShopProvider';
 
 
 const Detalle = ({ navigation, route }) => {

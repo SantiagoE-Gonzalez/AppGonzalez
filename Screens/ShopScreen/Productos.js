@@ -1,9 +1,9 @@
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, StyleSheet,SafeAreaView } from 'react-native'
 import { useEffect, useState } from 'react';
-import { FontsSizes } from '../Styles/fonts';
-import { Colors } from '../Styles/Colors';
+import { FontsSizes } from '../../Styles/fonts';
+import { Colors } from '../../Styles/Colors';
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from '../Firebase/config';
+import { db } from '../../Firebase/config';
 
 const Productos = ({ navigation, route }) => {
     const { category } = route.params;
@@ -21,7 +21,6 @@ const Productos = ({ navigation, route }) => {
               const querySnapshot = await getDocs(queryConsultaProductos);
               const items = [];
               querySnapshot.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
                 items.push({id: doc.id, ...doc.data()});
               });
               setProductos(items);
@@ -43,7 +42,7 @@ const Productos = ({ navigation, route }) => {
     }
 
     return (
-        <View>
+        <SafeAreaView>
             <FlatList
                 data={productos}
                 renderItem={({ item }) => {
@@ -62,7 +61,7 @@ const Productos = ({ navigation, route }) => {
                 }
                 keyExtractor={item => item.id.toString()}
             />
-        </View>
+        </SafeAreaView>
     )
 }
 

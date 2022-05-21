@@ -1,13 +1,12 @@
-import { View, TouchableOpacity, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import { View, TouchableOpacity, FlatList, StyleSheet, Text, StatusBar,SafeAreaView } from 'react-native';
 import React from 'react'
 import { useEffect, useState } from 'react';
 import { collection, getDocs, query } from "firebase/firestore";
-import { db } from '../Firebase/config';
+import { db } from '../../Firebase/config';
 const Categorias = ({ navigation }) => {
     const [categorias, setCategorias] = useState([]);
 
     const irACategoria = (categoria) => {
-        console.log(categoria);
         navigation.navigate('Productos', {
             category: categoria
         })
@@ -25,7 +24,6 @@ const Categorias = ({ navigation }) => {
                         console.log(doc.id, " => ", doc.data());
                         items.push({ id: doc.id, ...doc.data() });
                     });
-                    console.log(items);
                     setCategorias(items);
                 } catch (error) {
                     console.log(error);
@@ -36,7 +34,7 @@ const Categorias = ({ navigation }) => {
         })()
     }, []);
     return (
-        <View>
+        <SafeAreaView>
             <FlatList
                 data={categorias}
                 renderItem={({ item }) => {
@@ -52,7 +50,7 @@ const Categorias = ({ navigation }) => {
                 }
                 keyExtractor={item => item.id.toString()}
             />
-        </View>
+        </SafeAreaView>
     )
 }
 

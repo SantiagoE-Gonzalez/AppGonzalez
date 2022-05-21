@@ -1,8 +1,8 @@
 import React from 'react'
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import Categorias from "../../Screens/Categorias";
-import Detalle from "../../Screens/Detalle";
-import Productos from "../../Screens/Productos";
+import Categorias from "../../Screens/ShopScreen/Categorias";
+import Detalle from "../../Screens/ShopScreen/Detalle";
+import Productos from "../../Screens/ShopScreen/Productos";
 import { Colors } from '../../Styles/Colors';
 const ShopNavigator = () => {
     const Stack = createNativeStackNavigator(); {/**Es la ruta inicial */ }

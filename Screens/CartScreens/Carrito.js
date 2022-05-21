@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useContext } from 'react'
 import { Shop } from '../../Context/ShopProvider'
 
@@ -40,7 +40,7 @@ const Carrito = ({navigation}) => {
         <Item item={item} />
     );
     return (
-        <ScrollView>
+        <SafeAreaView>
             {cantidadItems > 0 ?
                 <View style={styles.item}>
                     <Text style={styles.title}>Resumen de compra</Text>
@@ -69,7 +69,7 @@ const Carrito = ({navigation}) => {
                 </TouchableOpacity>
             </View>: <Text></Text>
             }
-        </ScrollView>
+        </SafeAreaView>
     )
 }
 

@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, SafeAreaView, FlatList , TouchableOpacity} from 'react-native'
-import React, { useContext } from 'react'
+import { StyleSheet, Text, View, SafeAreaView, FlatList , TouchableOpacity,} from 'react-native'
+import React, {useContext} from 'react'
 import { Shop } from '../../Context/ShopProvider'
 import { Colors } from '../../Styles/Colors'
 
 const OrdenesRealizadas = ({navigation}) => {
-    const { ordenesRealizadas } = useContext(Shop)
-
+    //const [ordenesRealizadas, setOrdenesRealizadas] = useState([])
+    const {ordenesRealizadas} = useContext (Shop)
     const irADetalleDeCompra = (item) => {
         navigation.navigate('DetalleDeCompra', {
             item: item
@@ -32,11 +32,13 @@ const OrdenesRealizadas = ({navigation}) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
+            {ordenesRealizadas.length === 0 ? 
+            <Text style={styles.title}>Aún no hay ordenes. Si realizás una compra la visualizarás acá.</Text>:
             <FlatList
                 data={ordenesRealizadas}
                 renderItem={renderItem}
                 keyExtractor={item => item.id}
-            />
+            />}
         </SafeAreaView>
     )
 }
@@ -45,12 +47,12 @@ export default OrdenesRealizadas
 
 const styles = StyleSheet.create({
     item: {
-        backgroundColor: '#fff',
+        backgroundColor: Colors.backgroundCardColor,
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
         borderRadius: 10,
-        shadowColor: "#000000",
+        shadowColor: Colors.colorSombra,
         shadowOpacity: 0.4,
         shadowRadius: 10,
         shadowOffset: {
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
         fontWeight: '100'
     },
     boton: {
-        backgroundColor: '#ffb703',
+        backgroundColor: Colors.primaryColor,
         margin: 10,
         padding: 10,
         borderRadius: 10
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
     textoBoton: {
         textAlign: 'center',
         fontWeight: '500',
-        color: '#fff'
+        color: Colors.primaryTextHintColor
     }
 
 })

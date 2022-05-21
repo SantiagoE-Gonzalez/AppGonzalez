@@ -1,5 +1,8 @@
 export const Colors = {
     primaryColor: '#ffb703',
     primaryTextHintColor: '#fff',
-    colorBlanco: '#fff'
+    colorBlanco: '#fff',
+    colorSombra: '#000',
+    backgroundCardColor: '#fff',
+    textoBotonNormal: '#fff'
 };

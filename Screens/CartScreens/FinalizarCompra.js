@@ -3,16 +3,20 @@ import React, { useContext, useState } from 'react'
 import { Shop } from '../../Context/ShopProvider'
 import { Colors } from '../../Styles/Colors';
 import { db } from '../../Firebase/config'
-import { addDoc, collection, doc, getDoc, writeBatch } from 'firebase/firestore'
+import { addDoc, collection, writeBatch } from 'firebase/firestore'
 
 const FinalizarCompra = ({navigation}) => {
+    const {uid, clear, setCompraRealizadaOK} = useContext(Shop)
+
     const { totalAPagar, cantidadItems, cart } = useContext(Shop);
     const [nombre, setNombre] = useState("");
     const [apellido, setApellido] = useState("");
     const [email, setEmail] = useState("");
     const [telefono, setTelefono] = useState("");
     const [direccion, setDireccion] = useState("");
-    const [compraRealizada, setCompraRealizada] = useState(false);
+
+    
+
     const finalizarCompra = () => {
         // console.log("Se realizo la compra");
         // console.log(nombre, direccion);
@@ -38,13 +42,17 @@ const FinalizarCompra = ({navigation}) => {
             items: cart
             ,
             total: totalAPagar,
-            createdAt: new Date().toLocaleString()
+            createdAt: new Date().toLocaleString(),
+            uid: uid
         }
 
         //Primer paso: abrir un batch
         const batch = writeBatch(db)//ver en qué level colocarlo
         addDoc(collection(db, 'orders'), orderGenerada).then(({ id }) => {
             batch.commit().then(() => {
+                clear();
+                limpiarFormulario();
+                setCompraRealizadaOK(true);
                 Alert.alert(
                     "Orden generada con éxito",
                     `La orden se realizó con éxito con el id+ ${id}`,
@@ -59,6 +67,13 @@ const FinalizarCompra = ({navigation}) => {
         })
     }
 
+    const limpiarFormulario = () => {
+        setApellido("");
+        setDireccion("");
+        setEmail("");
+        setNombre("");
+        setTelefono("");
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
