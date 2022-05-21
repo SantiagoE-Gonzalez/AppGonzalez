@@ -5,7 +5,6 @@ import { Colors } from '../../Styles/Colors';
 const DetalleDeCompra = ({ route }) => {
 
   const { item } = route.params;
-  console.log(item)
 
   const Item = ({ item }) => (
     <View style={styles.item}>
