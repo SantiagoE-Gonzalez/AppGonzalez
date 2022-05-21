@@ -23,12 +23,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.sangonzalez94.AppGonzalez"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },"packagerOpts": {
-      "sourceExts": ["cjs"]
+    },
+    "packagerOpts": {
+      "sourceExts": [
+        "cjs"
+      ]
     }
   }
 }
