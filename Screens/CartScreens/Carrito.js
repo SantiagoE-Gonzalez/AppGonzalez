@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, SafeAreaView } from 'react-native'
 import React, { useContext } from 'react'
 import { Shop } from '../../Context/ShopProvider'
+import { Colors } from '../../Styles/Colors';
 
 const Carrito = ({navigation}) => {
     const { cart, totalAPagar, cantidadItems, removeItem, clear } = useContext(Shop);
@@ -30,7 +31,7 @@ const Carrito = ({navigation}) => {
                 <TouchableOpacity
                     onPress={() => eliminarProducto(item)}
                     style={styles.botonEliminarCompra}>
-                    <Text style={styles.textoBotonEliminarCompra}>Eliminar producto</Text>
+                    <Text style={styles.textoBotonEliminarCompra}>ELIMINAR PRODUCTO</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -60,12 +61,12 @@ const Carrito = ({navigation}) => {
                 <TouchableOpacity
                     onPress={clear}
                     style={styles.botonEliminarCompra}>
-                    <Text style={styles.textoBotonEliminarCompra}>Limpiar carrito</Text>
+                    <Text style={styles.textoBotonEliminarCompra}>LIMPIAR CARRITO</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     onPress={finalizarCompra}
                     style={styles.botonFinalizarCompra}>
-                    <Text style={styles.textoBotonFinalizarCompra}>Finalizar compra</Text>
+                    <Text style={styles.textoBotonFinalizarCompra}>FINALIZAR COMPRA</Text>
                 </TouchableOpacity>
             </View>: <Text></Text>
             }
@@ -77,18 +78,11 @@ export default Carrito
 
 const styles = StyleSheet.create({
     item: {
-        backgroundColor: '#fff',
+        backgroundColor: Colors.backgroundCardColor,
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
-        borderRadius: 10,
-        shadowColor: "#000000",
-        shadowOpacity: 0.4,
-        shadowRadius: 10,
-        shadowOffset: {
-            height: 1,
-            width: 1
-        }
+        borderRadius: 10
     },
     title: {
         fontSize: 20,
@@ -101,12 +95,12 @@ const styles = StyleSheet.create({
         fontWeight: '100'
     },
     botonFinalizarCompra: {
-        backgroundColor: '#ffb703',
+        backgroundColor: Colors.primaryColor,
         margin: 10,
         padding: 10,
         borderRadius: 10
     }, botonEliminarCompra: {
-        backgroundColor: '#d90429',
+        backgroundColor: Colors.colorDanger,
         margin: 10,
         padding: 10,
         borderRadius: 10
@@ -114,12 +108,12 @@ const styles = StyleSheet.create({
     textoBotonFinalizarCompra: {
         textAlign: 'center',
         fontWeight: '500',
-        color: '#fff'
+        color: Colors.primaryTextHintColor
     },
     textoBotonEliminarCompra: {
         textAlign: 'center',
         fontWeight: '500',
-        color: '#fff'
+        color: Colors.primaryTextHintColor
     }
 
 })

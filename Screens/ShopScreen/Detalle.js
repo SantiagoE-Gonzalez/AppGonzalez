@@ -1,6 +1,7 @@
-import { Image, View, Text, StyleSheet, Button } from 'react-native'
+import { Image, View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native'
 import React, {useContext} from 'react'
 import { Shop } from '../../Context/ShopProvider';
+import { Colors } from '../../Styles/Colors';
 
 
 const Detalle = ({ navigation, route }) => {
@@ -30,10 +31,10 @@ const Detalle = ({ navigation, route }) => {
             </View>
 
             <View
-                style={styles.view}>
-                <Button
+                style={styles.boton}>
+                <TouchableOpacity
                 onPress={agregarAlCarrito}
-                title={'Agregar al carrito'}></Button>
+                ><Text style={styles.textoBoton}>AGREGAR AL CARRITO</Text></TouchableOpacity>
             </View>
 
         </View>
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
         height: 100,
     },
     view: {
-        backgroundColor: '#fff',
+        backgroundColor: Colors.backgroundCardColor,
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
@@ -63,5 +64,16 @@ const styles = StyleSheet.create({
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
+    },
+    boton: {
+        backgroundColor: Colors.primaryColor,
+        margin: 10,
+        padding: 10,
+        borderRadius: 10
+    },
+    textoBoton: {
+        textAlign: 'center',
+        fontWeight: '500',
+        color: Colors.primaryTextHintColor
     }
 });

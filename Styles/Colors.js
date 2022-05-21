@@ -4,5 +4,6 @@ export const Colors = {
     colorBlanco: '#fff',
     colorSombra: '#000',
     backgroundCardColor: '#fff',
-    textoBotonNormal: '#fff'
+    textoBotonNormal: '#fff',
+    colorDanger: '#d90429'
 };

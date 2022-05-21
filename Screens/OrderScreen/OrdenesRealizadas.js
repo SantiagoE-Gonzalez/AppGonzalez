@@ -22,7 +22,7 @@ const OrdenesRealizadas = ({navigation}) => {
             <Text>Comprador: {item.buyer.nombre} {item.buyer.apellido}</Text>
             <TouchableOpacity style={styles.boton}
             onPress={() => irADetalleDeCompra(item)}>
-                <Text style={styles.textoBoton}>Ver más detalles</Text>
+                <Text style={styles.textoBoton}>VER MÁS DETALLES</Text>
             </TouchableOpacity>
         </View>
     );
@@ -52,13 +52,6 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         marginHorizontal: 16,
         borderRadius: 10,
-        shadowColor: Colors.colorSombra,
-        shadowOpacity: 0.4,
-        shadowRadius: 10,
-        shadowOffset: {
-            height: 1,
-            width: 1
-        }
     },
     title: {
         fontSize: 20,

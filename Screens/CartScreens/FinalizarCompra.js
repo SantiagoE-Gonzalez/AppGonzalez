@@ -138,18 +138,11 @@ export default FinalizarCompra
 
 const styles = StyleSheet.create({
     item: {
-        backgroundColor: '#fff',
+        backgroundColor: Colors.backgroundCardColor,
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
-        borderRadius: 10,
-        shadowColor: "#000000",
-        shadowOpacity: 0.4,
-        shadowRadius: 10,
-        shadowOffset: {
-            height: 1,
-            width: 1
-        }
+        borderRadius: 10
     },
     title: {
         fontSize: 20,
@@ -162,12 +155,7 @@ const styles = StyleSheet.create({
         fontWeight: '100'
     },
     botonFinalizarCompra: {
-        backgroundColor: '#ffb703',
-        margin: 10,
-        padding: 10,
-        borderRadius: 10
-    }, botonEliminarCompra: {
-        backgroundColor: '#d90429',
+        backgroundColor: Colors.primaryColor,
         margin: 10,
         padding: 10,
         borderRadius: 10
@@ -175,12 +163,7 @@ const styles = StyleSheet.create({
     textoBotonFinalizarCompra: {
         textAlign: 'center',
         fontWeight: '500',
-        color: '#fff'
-    },
-    textoBotonEliminarCompra: {
-        textAlign: 'center',
-        fontWeight: '500',
-        color: '#fff'
+        color: Colors.primaryTextHintColor
     },
     textInput: {
         borderColor: Colors.primaryColor,

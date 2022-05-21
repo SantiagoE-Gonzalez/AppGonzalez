@@ -3,6 +3,7 @@ import React from 'react'
 import { useEffect, useState } from 'react';
 import { collection, getDocs, query } from "firebase/firestore";
 import { db } from '../../Firebase/config';
+import { Colors } from '../../Styles/Colors';
 const Categorias = ({ navigation }) => {
     const [categorias, setCategorias] = useState([]);
 
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
         marginTop: StatusBar.currentHeight || 0,
     },
     item: {
-        backgroundColor: '#fff',
+        backgroundColor: Colors.backgroundCardColor,
         padding: 20,
         marginVertical: 8,
         marginHorizontal: 16,
