@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from 'react'
 import { db } from "../Firebase/config";
 import { collection,where, getDocs, query } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 //Se crea el contexto.
 export const Shop = createContext()
@@ -45,6 +45,14 @@ const ShopProvider = ({ children }) => {
 
     }, [uid, compraRealizadaOK])
 
+    const cerrarSesion = () => {
+        const auth = getAuth();
+        signOut(auth).then(() => {
+          // Sign-out successful.
+        }).catch((error) => {
+          // An error happened.
+        });
+    }
 
     //Uso de funciones del context
     const addItem = (item, cantidadToAdd) => {
@@ -81,7 +89,7 @@ const ShopProvider = ({ children }) => {
 
     return (
         <Shop.Provider value={{ cantidadItems, addItem, cart, totalAPagar,
-         removeItem, clear, ordenesRealizadas,uid,setCompraRealizadaOK }}>
+         removeItem, clear, ordenesRealizadas,uid,setCompraRealizadaOK,cerrarSesion}}>
             {children}
         </Shop.Provider>
     )

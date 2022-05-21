@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Alert} from 'react-native'
 import React, { useContext, useState } from 'react'
 import { Shop } from '../../Context/ShopProvider'
 import { Colors } from '../../Styles/Colors';
 import { db } from '../../Firebase/config'
-import { addDoc, collection, writeBatch } from 'firebase/firestore'
+import { addDoc, collection, writeBatch, getDoc, doc } from 'firebase/firestore'
 
-const FinalizarCompra = ({navigation}) => {
-    const {uid, clear, setCompraRealizadaOK} = useContext(Shop)
+const FinalizarCompra = ({ navigation }) => {
+    const { uid, clear, setCompraRealizadaOK } = useContext(Shop)
 
     const { totalAPagar, cantidadItems, cart } = useContext(Shop);
     const [nombre, setNombre] = useState("");
@@ -14,12 +14,9 @@ const FinalizarCompra = ({navigation}) => {
     const [email, setEmail] = useState("");
     const [telefono, setTelefono] = useState("");
     const [direccion, setDireccion] = useState("");
-
-    
+    const [loadingCheckout, setLoadingCheckout] = useState(false)
 
     const finalizarCompra = () => {
-        // console.log("Se realizo la compra");
-        // console.log(nombre, direccion);
         if (nombre === "" || apellido === ""
             || email === "" || telefono === "") {
             Alert.alert(
@@ -48,24 +45,68 @@ const FinalizarCompra = ({navigation}) => {
 
         //Primer paso: abrir un batch
         const batch = writeBatch(db)//ver en qué level colocarlo
-        addDoc(collection(db, 'orders'), orderGenerada).then(({ id }) => {
-            batch.commit().then(() => {
-                clear();
-                limpiarFormulario();
-                setCompraRealizadaOK(true);
-                Alert.alert(
-                    "Orden generada con éxito",
-                    `La orden se realizó con éxito con el id+ ${id}`,
-                    [
-                        { text: "Aceptar", onPress: () => navigation.navigate('OrdenesRealizadas') }
-                    ]
-                );
-            })
-        }).catch((err) => {
-            console.log(`Error: ${err.message}`);
-            setCheckoutText(`Error: ${err.message}`)
+        const outOfStock = []
+
+        //Chequear el stock del producto en nuestra db y restarlo a la cantidad, si corresponde
+        cart.forEach((prod) => {
+            setLoadingCheckout(true)
+            getDoc(doc(db, 'productos', prod.id))
+                .then((documentSnapshot) => {
+                    if (documentSnapshot.data().stock >= prod.cantidad) {
+                        batch.update(doc(db, 'productos', documentSnapshot.id), {
+                            stock: documentSnapshot.data().stock - prod.cantidad
+                        })
+                    } else {
+                        outOfStock.push({ id: documentSnapshot.id, ...documentSnapshot.data() })
+                    }
+                    console.log(outOfStock);
+
+                    if (outOfStock.length === 0) {
+                        addDoc(collection(db, 'orders'), orderGenerada).then(({ id }) => {
+                            batch.commit().then(() => {
+                                clear();
+                                limpiarFormulario();
+                                setCompraRealizadaOK(true);
+                                Alert.alert(
+                                    "Orden generada con éxito",
+                                    `La orden se realizó con éxito con el id+ ${id}`,
+                                    [
+                                        {
+                                            text: "Aceptar", onPress: () => navigation.navigate('Carrito')
+                                        }
+                                    ]
+                                );
+                            })
+                        }).catch((err) => {
+                            Alert.alert(
+                                "No se pudo realizar la compra",
+                                `Error: ${err.message}`,
+                                [
+                                    { text: "Aceptar" }
+                                ]
+                            );
+                            console.log(`Error: ${err.message}`);
+                        })
+                    } else {
+                        let mensaje = ''
+                        for (const producto of outOfStock) {
+                            mensaje += `${producto.title} `
+                        }
+                        Alert.alert(
+                            "Productos fuera de stock",
+                            `Productos fuera de stock: ${mensaje}`,
+                            [
+                                { text: "Aceptar" }
+                            ]
+                        );
+                        setCheckoutText(`Productos fuera de stock: ${mensaje}`)
+                    }
+
+                    setLoadingCheckout(false)
+                })
         })
     }
+
 
     const limpiarFormulario = () => {
         setApellido("");
@@ -131,7 +172,7 @@ const FinalizarCompra = ({navigation}) => {
                 <Text style={styles.textoBotonFinalizarCompra}>Finalizar compra</Text>
             </TouchableOpacity>
         </SafeAreaView>
-        )
+    )
 }
 
 export default FinalizarCompra

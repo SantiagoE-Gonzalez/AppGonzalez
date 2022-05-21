@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, SafeAreaView } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native'
 import React, { useContext } from 'react'
 import { Shop } from '../../Context/ShopProvider'
 import { Colors } from '../../Styles/Colors';
 
-const Carrito = ({navigation}) => {
+const Carrito = ({ navigation }) => {
     const { cart, totalAPagar, cantidadItems, removeItem, clear } = useContext(Shop);
-    
+
     const eliminarProducto = (item) => {
         removeItem(item)
     }
@@ -42,34 +42,37 @@ const Carrito = ({navigation}) => {
     );
     return (
         <SafeAreaView>
-            {cantidadItems > 0 ?
-                <View style={styles.item}>
-                    <Text style={styles.title}>Resumen de compra</Text>
-                    <Text>Total a pagar: ${totalAPagar.toFixed(2)}</Text>
-                    <Text>Cantidad de artículos: {cantidadItems}</Text>
-                </View> : 
-                <Text style={styles.title}> Todavía no agregaste ningún producto</Text>
-            }
+            <ScrollView>
+                {cantidadItems > 0 ?
+                    <View style={styles.item}>
+                        <Text style={styles.title}>Resumen de compra</Text>
+                        <Text>Total a pagar: ${totalAPagar.toFixed(2)}</Text>
+                        <Text>Cantidad de artículos: {cantidadItems}</Text>
+                    </View> :
+                    <Text style={styles.title}> Todavía no agregaste ningún producto</Text>
+                }
 
-            <FlatList
-                data={cart}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-            />
-            {cantidadItems > 0 ?
-            <View>
-                <TouchableOpacity
-                    onPress={clear}
-                    style={styles.botonEliminarCompra}>
-                    <Text style={styles.textoBotonEliminarCompra}>LIMPIAR CARRITO</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                    onPress={finalizarCompra}
-                    style={styles.botonFinalizarCompra}>
-                    <Text style={styles.textoBotonFinalizarCompra}>FINALIZAR COMPRA</Text>
-                </TouchableOpacity>
-            </View>: <Text></Text>
-            }
+                <FlatList
+                    data={cart}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.id}
+                />
+                {cantidadItems > 0 ?
+                    <View>
+                        <TouchableOpacity
+                            onPress={clear}
+                            style={styles.botonEliminarCompra}>
+                            <Text style={styles.textoBotonEliminarCompra}>LIMPIAR CARRITO</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={finalizarCompra}
+                            style={styles.botonFinalizarCompra}>
+                            <Text style={styles.textoBotonFinalizarCompra}>FINALIZAR COMPRA</Text>
+                        </TouchableOpacity>
+                    </View> : <Text></Text>
+                }
+            </ScrollView>
+
         </SafeAreaView>
     )
 }
